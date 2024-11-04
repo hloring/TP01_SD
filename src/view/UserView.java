@@ -3,9 +3,7 @@ package view;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UserView {
@@ -75,19 +73,16 @@ public class UserView {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
         panel.add(tipoConexaoLabel, gbc);
 
         checkbox1 = new JCheckBox("TCP");
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
         panel.add(checkbox1, gbc);
 
         checkbox2 = new JCheckBox("UCP");
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
         panel.add(checkbox2, gbc);
 
         checkbox1.addActionListener(e -> {
@@ -105,22 +100,35 @@ public class UserView {
         JLabel ipConexaoLabel = new JLabel("IP para conexão");
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridwidth = 1;
         panel.add(ipConexaoLabel, gbc);
 
         textField = new JTextField(15);
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
         panel.add(textField, gbc);
 
         ipDisplayLabel = new JLabel("");
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
         panel.add(ipDisplayLabel, gbc);
 
-        textField.addActionListener(e -> updateIpDisplay());
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateIpDisplay();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateIpDisplay();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateIpDisplay();
+            }
+        });
 
         return panel;
     }

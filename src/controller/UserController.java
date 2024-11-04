@@ -6,12 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.Socket;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.net.ServerSocket;
+import java.net.*;
 
 public class UserController {
 
@@ -25,8 +20,10 @@ public class UserController {
         this.view.addPapelButtonListener(new PapelButtonListener());
         this.view.addTesouraButtonListener(new TesouraButtonListener());
 
-        // Thread to handle incoming connections
+        // Thread to handle incoming TCP connections
         new Thread(() -> startTcpServer()).start();
+        // Thread to handle incoming UDP packets
+        new Thread(() -> startUdpServer()).start();
     }
 
     // Listener para o botão Pedra
@@ -118,6 +115,22 @@ public class UserController {
             determineWinner();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void startUdpServer() {
+        try (DatagramSocket udpSocket = new DatagramSocket(12345)) {
+            byte[] buffer = new byte[256];
+            while (true) {
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                udpSocket.receive(packet);
+                opponentSelection = new String(packet.getData(), 0, packet.getLength());
+                view.showAlert("Recebido via UDP: " + opponentSelection);
+                determineWinner();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            view.showAlert("Erro ao iniciar o servidor UDP: " + e.getMessage());
         }
     }
 
