@@ -75,27 +75,10 @@ public class UserView {
         gbc.gridwidth = 1;
         panel.add(tipoConexaoLabel, gbc);
 
-        checkbox1 = new JCheckBox("TCP");
+        checkbox1 = new JCheckBox("RMI");
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(checkbox1, gbc);
-
-        checkbox2 = new JCheckBox("UCP");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel.add(checkbox2, gbc);
-
-        checkbox1.addActionListener(e -> {
-            if (checkbox1.isSelected()) {
-                checkbox2.setSelected(false);
-            }
-        });
-
-        checkbox2.addActionListener(e -> {
-            if (checkbox2.isSelected()) {
-                checkbox1.setSelected(false);
-            }
-        });
 
         JLabel ipConexaoLabel = new JLabel("IP para conexão");
         gbc.gridx = 1;
